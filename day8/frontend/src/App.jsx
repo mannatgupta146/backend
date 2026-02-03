@@ -5,7 +5,7 @@ const App = () => {
   const [note, setNote] = useState([]);
 
   const fetchNotes = async () => {
-    const res = await axios.get("http://localhost:3000/api/notes");
+    const res = await axios.get("https://backend-zd5e.onrender.com/api/notes");
     setNote(res.data.notes);
   };
 
@@ -14,13 +14,13 @@ const App = () => {
     const title = e.target.title.value;
     const description = e.target.description.value;
 
-    await axios.post("http://localhost:3000/api/notes", { title, description });
+    await axios.post("https://backend-zd5e.onrender.com/api/notes", { title, description });
     fetchNotes();
     e.target.reset();
   };
 
   const deleteNotes = async (id) => {
-    await axios.delete(`http://localhost:3000/api/notes/${id}`);
+    await axios.delete(`https://backend-zd5e.onrender.com/api/notes/${id}`);
     fetchNotes();
   };
 
@@ -28,7 +28,7 @@ const App = () => {
     const title = prompt("Update title", oldTitle);
     const description = prompt("Update description", oldDesc);
 
-    await axios.patch(`http://localhost:3000/api/notes/${id}`, {
+    await axios.patch(`https://backend-zd5e.onrender.com/api/notes/${id}`, {
       title: title || oldTitle,
       description: description || oldDesc,
     });
