@@ -27,9 +27,9 @@ app.get('/api/notes', async(req, res) => {
 
 app.patch('/api/notes/:id', async(req, res) => {
     const {id} = req.params
-    const {description} = req.body
+    const {title, description} = req.body
 
-    await notesModel.findByIdAndUpdate(id, {description})
+    await notesModel.findByIdAndUpdate(id, {title, description})
 
     res.status(200).json({
         message: 'note updated'
