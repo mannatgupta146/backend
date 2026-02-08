@@ -1,6 +1,7 @@
 const express = require('express')
 const userModel = require('../models/user.model')
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
 
 const authRouter = express.Router()
 
@@ -15,7 +16,9 @@ authRouter.post('/register', async(req, res) => {
         })
     }
 
-    const user = await userModel.create({name, email, password})
+    const hash = crypto.createHash('md5').update(password).digest('hex')
+
+    const user = await userModel.create({name, email, password: hash})
 
     const token = jwt.sign(
         {
