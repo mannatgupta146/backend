@@ -34,4 +34,38 @@ authRouter.post('/register', async(req, res) =>{
     })
 })
 
+authRouter.post('/protected', async(req, res) =>{
+    const {email, password} = req.body
+
+    const users = await userModel.findOne({email})
+
+    if(!users){
+        return res.status(404).json({
+            message: "User not found"
+        })
+    }
+
+    const isPasswordMatched = users.password = crypto.createHash('md5').update(password).digest('hex')
+
+    if(!isPasswordMatched){
+        return res.status(400).json({
+            message: "incorrect password"
+        })
+    }
+
+    const token = jwt.sign(
+        {
+            id: users._id
+        },
+        process.env.JWT_SECRET
+    )
+
+    res.cookie('jwt_token', token)
+
+    res.status(200).json({
+        message: "user logged in successfully",
+        users
+    })
+})
+
 module.exports = authRouter
