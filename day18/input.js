@@ -13,7 +13,7 @@ const emailTool = tool(sendEmail, {
   schema: z.object({
     to: z.string().describe("The recipient's email address"),
     subject: z.string().describe("The subject of the email"),
-    html: z.string().optional().describe("The HTML content of the email"),
+    html: z.string().describe("The full body content of the email"),
   }),
 })
 
@@ -47,7 +47,7 @@ async function main() {
       const response = await agent.invoke({messages})
       messages.push(response.messages[response.messages.length - 1])
 
-      console.log("AI Response:", response)
+      console.log("AI Response:", response.messages[response.messages.length - 1].text)
     } catch (err) {
       console.error("Error from AI:", err)
     }
