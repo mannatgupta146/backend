@@ -1,9 +1,23 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+import { MistralAIEmbeddings } from "@langchain/mistralai";
+import dotenv from "dotenv";
+import { Pinecone } from '@pinecone-database/pinecone'
+
+dotenv.config();
+
+
+const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
+const index = pc.Index("rag");
 
 const loader = new PDFLoader("./story.pdf");
 
 const docs = await loader.load();
+
+const embedding = new MistralAIEmbeddings({
+    apiKey: process.env.MISTRAL_API_KEY,
+    model: "mistral-embed",
+});
 
 const splitter = new RecursiveCharacterTextSplitter({
   chunkSize: 500,
@@ -12,5 +26,25 @@ const splitter = new RecursiveCharacterTextSplitter({
 
 const chunks = await splitter.splitDocuments(docs);
 
-console.log(chunks);
-console.log(chunks.length);
+const data = await Promise.all(chunks.map(async (chunk) => {
+    const embeddingResult = await embedding.embedDocuments([chunk.pageContent]);
+    return {
+        content: chunk.pageContent,
+        embedding: embeddingResult[0],
+    };
+}));
+
+
+const result = await index.upsert({
+    upsertRequest: {
+        vectors: data.map((item, idx) => ({
+            id: `chunk-${idx}`,
+            values: item.embedding,
+            metadata: {
+                content: item.content,
+            },
+        })),
+    },
+});
+
+console.log(result)
