@@ -34,17 +34,14 @@ const data = await Promise.all(chunks.map(async (chunk) => {
     };
 }));
 
+const vectors = data.map((item, idx) => ({
+  id: `chunk-${idx}`,
+  values: item.embedding,
+  metadata: {
+    content: item.content,
+  },
+}));
 
-const result = await index.upsert({
-    upsertRequest: {
-        vectors: data.map((item, idx) => ({
-            id: `chunk-${idx}`,
-            values: item.embedding,
-            metadata: {
-                content: item.content,
-            },
-        })),
-    },
-});
+const result = await index.upsert(vectors);
 
-console.log(result)
+console.log("✅ Upsert success:", result);
