@@ -19,7 +19,7 @@ const embedding = new MistralAIEmbeddings({
     model: "mistral-embed",
 });
 
-const splitter = new RecursiveCharacterTextSplitter({
+/* const splitter = new RecursiveCharacterTextSplitter({
   chunkSize: 500,
   chunkOverlap: 0,
 });
@@ -32,9 +32,9 @@ const data = await Promise.all(chunks.map(async (chunk) => {
         content: chunk.pageContent,
         embedding: embeddingResult[0],
     };
-}));
+})); */
 
-const vectors = data.map((item, idx) => ({
+/* const vectors = data.map((item, idx) => ({
   id: `chunk-${idx}`,
   values: item.embedding,
   metadata: {
@@ -44,4 +44,16 @@ const vectors = data.map((item, idx) => ({
 
 const result = await index.upsert(vectors);
 
-console.log("✅ Upsert success:", result);
+console.log("✅ Upsert success:", result); */
+
+const queryEmbedding = await embedding.embedQuery('How was the internship experience?');
+
+console.log(queryEmbedding)
+
+const result = await index.query({
+    vector: queryEmbedding,
+    topK: 2,
+    includeMetadata: true,
+})
+
+console.log(JSON.stringify(result))
