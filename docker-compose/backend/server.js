@@ -4,6 +4,7 @@ import morgan from 'morgan';
 const app = express();  
 
 app.use(morgan('dev'));
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
@@ -28,6 +29,10 @@ app.get('/api/users', (req, res) => {
     { id: 4, name: 'David' },
   ];
   res.json(users);
+});
+
+app.get("*name", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
