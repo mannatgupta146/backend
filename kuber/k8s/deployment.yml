@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kuber-deployment
+  name: express-deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: kuber
+      app: express
   template:
     metadata:
       labels:
-        app: kuber
+        app: express
     spec:
       containers:
-      - name: kuber-container
-        image: kuber:latest
-        imagePullPolicy: IfNotPresent
+      - name: express-container
+        image: hello:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         resources: 
