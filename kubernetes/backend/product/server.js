@@ -6,7 +6,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 
-app.get('/', async (req, res) => {
+app.get('/api/product', async (req, res) => {
   const response = await axios.get('http://main-server-service/');
   res.status(200).send(response.data);
 });
