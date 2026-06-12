@@ -34,4 +34,17 @@ describe("User Model Test", () => {
         expect(savedUser.name).toBe("John Doe");
         expect(savedUser.email).toBe("johndoe@examole.com");
     })
+
+    it("should fail to create user without required fields", async () => {
+        const userWithoutRequiredFields = new User({ name: "John Doe" });
+        let err;
+
+        try{
+            await userWithoutRequiredFields.validate();
+        }catch(error){
+            err = error;
+        }
+        expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
+        expect(err.errors).toHaveProperty("email");
+    })
 })
