@@ -32,7 +32,11 @@ app.use(express.static("public"))
 // --- Routes ----
 
 app.get("/", async (req, res) => {
-    res.render("index")
+    res.render("index", {
+        username: "Cohort User",
+        bio: "Web Developer | MERN Stack Enthusiast 🚀",
+        imageUrl: "https://i.pravatar.cc/150?img=12"
+    })
 })
 
 // ---- Server start ----
