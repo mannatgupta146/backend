@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
+
 <body class="bg-gray-100 flex justify-center items-center min-h-screen">
 
     <div class="bg-white p-6 rounded-xl shadow-lg w-80">
-        
-        <div class="flex items-center gap-4">
+
+        <!-- Profile Section -->
+        <div class="flex items-center gap-4 mb-6">
+
             <!-- Profile Image -->
             <img
                 src="<%= imageUrl %>"
@@ -21,33 +25,43 @@
 
             <!-- Username & Bio -->
             <div>
-                <h2 class="font-bold text-lg"><%= username %></h2>
+                <h2 class="font-bold text-lg">
+                    <%= username %>
+                </h2>
+
                 <p class="text-gray-600 text-sm">
-                   <%= bio %>
+                    <%= bio %>
                 </p>
             </div>
+
         </div>
 
         <!-- List -->
-        <ol>
-            <% for(let i = 0;i < 10; i++) { %>
-                <li class="mb-2">Text number <%= i+1 %></li>
+        <ol class="list-decimal list-inside mb-6">
+            <% for(let i = 0; i < 10; i++) { %>
+                <li class="mb-2">
+                    Text number <%= i + 1 %>
+                </li>
             <% } %>
         </ol>
 
         <!-- Conditional Rendering -->
-
         <% const age = 17; %>
 
-        <h1>
+        <h1 class="font-semibold text-lg mb-6">
             <%= age >= 18 ? "Eligible" : "Not Eligible" %>
         </h1>
 
+        <!-- Loops -->
         <% const users = ["Ali", "Ahmed", "Sara"]; %>
 
-        <% users.forEach(user => { %>
-            <p><%= user %></p>
-        <% }) %>
+        <div>
+            <% users.forEach(user => { %>
+                <p class="mb-1">
+                    <%= user %>
+                </p>
+            <% }) %>
+        </div>
 
     </div>
 
