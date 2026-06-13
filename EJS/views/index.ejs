@@ -28,6 +28,21 @@
             </div>
         </div>
 
+        <!-- List -->
+        <ol>
+            <% for(let i = 0;i < 10; i++) { %>
+                <li class="mb-2">Text number <%= i+1 %></li>
+            <% } %>
+        </ol>
+
+        <!-- Conditional Rendering -->
+
+        <% const age = 17; %>
+
+        <h1>
+            <%= age >= 18 ? "Eligible" : "Not Eligible" %>
+        </h1>
+
     </div>
 
 </body>
