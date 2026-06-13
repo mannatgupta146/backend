@@ -1,31 +1,9 @@
-import userModel from "../models/user.model";
-import bcrypt from "bcrypt"
-import { generateAccessToken } from "../utils/generateToken";
+import { registerService } from "../services/auth.service";
 
 export const registerController = async (req, res) => {
-    let { name, email, password } = req.body;
-
-    if (!email || !password || !name) {
-        return res.status(400).json({ message: "All the fields are required" })
-    }
-
-    // Checking user exists
-    const userExists = await userModel.findOne({ email });
-
-    if (userExists) {
-        return res.status(409).json({ message: "User already exists" })
-    }
-
-    let hasPassword = bcrypt.hashSync(password, 10)
-
-    let newUser = await userModel.create({
-        name,
-        email,
-        password: hasPassword
-    })
-
-    let accessToken = generateAccessToken(newUser._id)
-    let refreshToken = generateRefreshToken(newUser._id)
+    
+    let result = await registerService(req.body)
+    let { accessToken, refreshToken, newUser } = result
 
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
@@ -38,7 +16,7 @@ export const registerController = async (req, res) => {
         sameSite: "strict",
         secure: false,
         maxAge: 24 * 60 * 60 * 1000 // 1 day
-    })
+    }) 
 
     return res.status(201).json({
         message: "User created successfully",
