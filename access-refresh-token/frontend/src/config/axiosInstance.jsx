@@ -12,11 +12,11 @@ axiosInstance.interceptors.response.use(
         console.log("axios instance response ", res)
         return res
     },
-    (error) => {
+    async (error) => {
         console.log("error in instance", error)
 
         if(error?.response?.status === 401){
-            axiosInstance.get("/get-accessToken")
+            await axiosInstance.get("/get-accessToken")
         }
     }
 )
