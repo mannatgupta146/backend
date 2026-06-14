@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginController, registerController } from "../controllers/auth.controller.js";
+import { getAccessTokenController, loginController, registerController } from "../controllers/auth.controller.js";
 
 const authRouter = Router()
 
@@ -7,5 +7,7 @@ const authRouter = Router()
 authRouter.post("/register", registerController)
 
 authRouter.post("/login", loginController)
+
+authRouter.get("/get-accessToken", getAccessTokenController)
 
 export default authRouter

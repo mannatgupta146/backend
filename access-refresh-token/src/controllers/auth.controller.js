@@ -1,4 +1,8 @@
-import { loginService, registerService } from "../services/auth.service.js"
+import {
+  getAccessTokenService,
+  loginService,
+  registerService,
+} from "../services/auth.service.js"
 
 export const registerController = async (req, res) => {
   let { accessToken, refreshToken, newUser } = await registerService(req.body)
@@ -44,4 +48,25 @@ export const loginController = async (req, res) => {
   })
 }
 
-export default { registerController, loginController }
+export const getAccessTokenController = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken
+
+  if (!refreshToken) {
+    res.status(401).json({
+      message: "Unauthorized request",
+    })
+  }
+
+  const accessToken  = await getAccessTokenService(refreshToken)
+
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+    maxAge: 10 * 60 * 1000, // 10 min
+  })
+
+  return res.status(200).json({
+    message: "Access token generated successfully",
+  })
+}

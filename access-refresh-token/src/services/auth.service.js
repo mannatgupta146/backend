@@ -1,5 +1,6 @@
 import userModel from "../models/user.model.js"
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -30,6 +31,9 @@ export const registerService = async (data) => {
 
     let accessToken = generateAccessToken(newUser._id)
     let refreshToken = generateRefreshToken(newUser._id)
+
+    newUser.refreshToken = refreshToken
+    await newUser.save()
 
     return {
       accessToken,
@@ -67,6 +71,9 @@ export const loginService = async (data) => {
     let accessToken = generateAccessToken(user._id)
     let refreshToken = generateRefreshToken(user._id)
 
+    user.refreshToken = refreshToken
+    await user.save()
+
     return {
       accessToken,
       refreshToken,
@@ -75,4 +82,26 @@ export const loginService = async (data) => {
   } catch (error) {
     throw new Error(error)
   }
+}
+
+export const getAccessTokenService = async (refreshToken) => {
+    let decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
+
+    if(!decoded){
+        throw new Error("Unauthorized")
+    }
+
+    const user = await userModel.findById(decoded.id)
+
+    if(!user){
+        throw new Error("User not found")
+    }
+
+    if(user.refreshToken !== refreshToken){
+        throw new Error("Unauthorized")
+    }
+
+    let accessToken = generateAccessToken(user._id)
+
+    return accessToken
 }
