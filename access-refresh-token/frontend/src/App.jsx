@@ -1,12 +1,12 @@
 import React from 'react'
-import axios from "axios"
+import { axiosInstance } from './config/axiosInstance'
 
 const App = () => {
 
   let getData = async() => {
     try {
-      let res = await axios.get('https://fakestoreapi.com/products')
-      console.log(res)
+      let res = await axiosInstance.get('/products')
+      console.log("this is ui-app => ", res)
     } catch (error) {
       console.log(error)
     }
