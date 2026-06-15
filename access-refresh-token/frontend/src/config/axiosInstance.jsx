@@ -7,7 +7,7 @@ export let axiosInstance = axios.create({
 
 /* axiosInstance.interceptors.request.use() */
 
-axiosInstance.interceptors.response.use(
+/* axiosInstance.interceptors.response.use(
     (res) => {
         console.log("axios instance response ", res)
         return res
@@ -19,4 +19,4 @@ axiosInstance.interceptors.response.use(
             await axiosInstance.get("/get-accessToken")
         }
     }
-)
+) */
