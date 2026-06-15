@@ -16,7 +16,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Hey ....</h1>
+      <h1>No need useless</h1>
     </div>
   )
 }
